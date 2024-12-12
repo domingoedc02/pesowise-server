@@ -1,0 +1,47 @@
+
+
+### Get All Users
+GET http://localhost:8080/api/accounts
+Content-Type: application/json
+
+###
+
+### Add a New User
+POST http://localhost:8080/api/accounts
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Domingo",
+  "userName": "jdomingo02",
+  "email": "john.doe@example.com",
+  "password": "123456"
+}
+
+###
+
+### Get Account by Email or Username
+GET http://localhost:8080/api/accounts/jdomingo02
+Content-Type: application/json
+
+###
+
+### Delete a User by ID
+DELETE http://localhost:8080/api/accounts/674e96d6bfa9316787444d26
+Content-Type: application/json
+
+###
+
+### Get All Users
+GET http://localhost:8080/api/accounts/key
+Content-Type: application/json
+
+###
+
+### Add a Password
+PUT http://localhost:8080/api/accounts/674e95009d1a8b2e42247d36
+Content-Type: application/json
+
+{
+  "password": "1234567"
+}

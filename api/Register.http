@@ -1,0 +1,57 @@
+
+
+### Get All Users
+GET http://localhost:8080/api/accounts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZG9taW5nbzI1IiwiaWF0IjoxNzMzMjk4ODg0LCJleHAiOjE3MzMzMDA2ODR9.daIiCJ84ryB9LSP2h22rJ6UvmreNDULfh5UFRSMa3DY
+
+###
+
+### Add a New User
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Domingo",
+  "userName": "jdomingo25",
+  "email": "domingoec@yahoo.com"
+}
+
+###
+
+### Get Account by Email or Username
+POST http://localhost:8080/api/auth/verify/email
+Content-Type: application/json
+
+{
+  "authId": "1",
+  "code": "414729"
+}
+
+###
+
+### Delete a User by ID
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "domingoec@yahoo.com",
+  "password": "1234567"
+}
+
+###
+
+### Get All Users
+GET http://localhost:8080/api/accounts/key
+Content-Type: application/json
+
+###
+
+### Add a Password
+PUT http://localhost:8080/api/accounts/1
+Content-Type: application/json
+
+{
+  "password": "1234567"
+}

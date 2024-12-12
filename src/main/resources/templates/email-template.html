@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+</head>
+<body>
+    <h1>Verification</h1>
+
+    <h3>Dear <span th:text="${name}">[Recipient Name]</span></h3>
+    <p>Thank you for using PesoWise!</p>
+    <p>We are sending this email as part of our verification process to ensure the security of your account. Your verification code is:</p>
+
+    <h3 th:text="${authCode}" style="padding: 10px 20px; background-color: lightgrey; display: inline-block; font-size: 28px">129304</h3>
+
+    <p>Please enter this code in the app to complete your verification.</p>
+    <p>If you did not request this code or have any concerns, please contact our support team immediately at <a
+            href="mailto:support@pesowiseph.com">support@pesowiseph.com</a>.</p>
+    <p>Thank you for trusting PesoWise to manage your financial journey.</p>
+    <p style="margin-top: 100px">Best regards,</p>
+    <h4>The PesoWise Team</h4>
+</body>
+</html>
