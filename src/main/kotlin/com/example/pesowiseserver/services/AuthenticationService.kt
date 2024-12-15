@@ -1,41 +1,65 @@
 package com.example.pesowiseserver.services
 
+import com.example.pesowiseserver.controllers.LoginDto
 import com.example.pesowiseserver.controllers.RegisterAccountDto
-import com.example.pesowiseserver.controllers.ResponseStatus
-import com.example.pesowiseserver.data.entity.Accounts
-import com.example.pesowiseserver.data.repository.AccountsRepository
+import com.example.pesowiseserver.data.entity.Users
+import com.example.pesowiseserver.data.repository.UsersRepository
+import com.example.pesowiseserver.util.EncryptionUtil
 import com.example.pesowiseserver.util.GenerateAuthCodeUtil
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
+import com.example.pesowiseserver.util.JwtUtil
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
 class AuthenticationService(
-    private val accountsRepository: AccountsRepository,
+    private val usersRepository: UsersRepository,
     private val emailSendService: EmailSendService,
-    private val generateAuthCodeUtil: GenerateAuthCodeUtil
+    private val generateAuthCodeUtil: GenerateAuthCodeUtil,
+    private val jwtUtil: JwtUtil
 ) {
 
-    fun registerNewAccount(dto: RegisterAccountDto): ResponseStatus{
+    fun login(dto: LoginDto): ResponseEntity<Map<String, String>>{
+        val userAccount = usersRepository.findByEmailOrUserName(dto.username, dto.username)
 
-        val accEmail = accountsRepository.findByEmail(dto.email)
-        val accUserName = accountsRepository.findByUserName(dto.userName)
+        if (userAccount.isEmpty) return ResponseEntity.status(404).body(mapOf("not_found" to "Users not found"))
 
-        if (accEmail != null) throw RuntimeException("This email is already registered. Pleas enter other email.")
-        if (accUserName != null) throw RuntimeException("This username is already registered. Pleas enter other username.")
+        val objectMapper = jacksonObjectMapper()
+        val jsonNode = objectMapper.readTree(userAccount.get().password?.let { EncryptionUtil.decryptPassword(it) })
 
-        val newAccount = Accounts(
-            null,
-            dto.firstName,
-            dto.lastName,
-            dto.userName,
-            dto.email,
-            null
-        )
-        val saveAcc = accountsRepository.save(newAccount)
-        val code = generateAuthCodeUtil.getAuthCode(saveAcc.id!!.toString())
+        val password = jsonNode["password"].asText()
+
+        if ((dto.username == userAccount.get().userName && dto.password == password || dto.username == userAccount.get().email && dto.password == password)) {  // Mock validation
+            val accessToken = jwtUtil.generateAccessToken(userAccount.get().userName, userAccount.get().role)
+            val refreshToken = jwtUtil.generateRefreshToken(userAccount.get().userName, userAccount.get().role)
+            return ResponseEntity.ok(mapOf(
+                "accessToken" to accessToken,
+                "refreshToken" to refreshToken
+            ))
+        } else {
+            return ResponseEntity.status(400).body(mapOf("bad_request" to "Wrong credentials, Please try again"))
+        }
+    }
+
+    fun registerNewAccount(dto: RegisterAccountDto): ResponseEntity<String>{
+
+        val accEmail = usersRepository.findByEmail(dto.email)
+        val accUserName = usersRepository.findByUserName(dto.userName)
+
+        if (accUserName.isPresent) return ResponseEntity.status(400).body("The username is already exist, Please try again")
+        if (accEmail.isPresent) return ResponseEntity.status(400).body("The email is already exist, Please try again")
+
+        val newAccount = Users()
+        newAccount.firstName = dto.firstName
+        newAccount.lastName = dto.lastName
+        newAccount.userName = dto.userName
+        newAccount.email = dto.email
+        val saveAcc = usersRepository.save(newAccount)
+        val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
         val subject = "Verification Code for PesoWise"
         emailSendService.sendEmail(dto.email, subject, code, dto.firstName)
-        return ResponseStatus(HttpStatus.OK, "Successfully Registered", dto)
+
+        val accessToken = jwtUtil.generateAccessToken(saveAcc.userName, saveAcc.role)
+        return ResponseEntity.status(200).body(accessToken)
     }
 }

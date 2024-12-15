@@ -1,28 +1,37 @@
 package com.example.pesowiseserver.data.entity
 
-import com.example.pesowiseserver.util.enum.AccountTypeEnum
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "accounts")
-data class Accounts(
+@Table(name = "credit_cards")
+data class CreditCard(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val accountId: String? = null,
+    val id: String? = "",
 
     @Column(nullable = false)
-    var userId: String = "",
+    val userId: String = "",
 
     @Column(nullable = false)
-    var name: String = "",
+    val name: String = "",
+
+    @Column(nullable = true)
+    val lastFourDigits: Int? = null,
 
     @Column(nullable = false)
-    var isActive: Boolean = true,
+    val creditLimit: BigDecimal = BigDecimal.ZERO,
 
     @Column(nullable = false)
-    var accountType: AccountTypeEnum = AccountTypeEnum.PERSONAL,
+    val usedAmount: BigDecimal = BigDecimal.ZERO,
+
+    @Column(nullable = false)
+    val statementDay: String = "",
+
+    @Column(nullable = false)
+    val dueDay: String = "",
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

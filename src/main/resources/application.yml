@@ -3,17 +3,18 @@ spring:
     name: PesoWise-Server
 
   datasource:
-    url: jdbc:postgresql://209.46.124.224:5432/pesowise_dev_db
+    url: jdbc:postgresql://209.46.126.200:5432/pesowise_db
     username: dev_pesowise
-    password: Darkhunter23#
+    password: 1yNh66^m9
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
+      pool-name: HikariCP
+
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
   mail:
@@ -32,3 +33,12 @@ spring:
 secret:
   key: hQm4Khsf0pjIx8RNrg3LTbrbCsiiW6V78iyiaF1k4wg=
   baseUrl: http://localhost:8080
+  jwtKey: Cbf9iP65ogrWZhBI6Tevdc4XAySdNJaCSBxd2M8XDzk=
+
+#server:
+#  address: 127.0.0.1
+
+#logging:
+#  level:
+#    org:
+#      springframework: DEBUG

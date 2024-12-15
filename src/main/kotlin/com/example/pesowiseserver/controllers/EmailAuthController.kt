@@ -1,7 +1,7 @@
 package com.example.pesowiseserver.controllers
 
 import com.example.pesowiseserver.services.EmailAuthCodeService
-import com.example.pesowiseserver.services.EmailAuthResponse
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,8 +15,7 @@ class EmailAuthController(
 ) {
 
     @PostMapping
-    fun verifyEmail(@RequestBody dto: VerifyEmailDto): EmailAuthResponse{
-        println(dto)
+    fun verifyEmail(@RequestBody dto: VerifyEmailDto): ResponseEntity<String>{
         return emailAuthCodeService.verifyEmail(dto.authId, dto.code)
     }
 }

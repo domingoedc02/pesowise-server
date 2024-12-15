@@ -28,7 +28,10 @@ class SecurityConfig(
             .csrf { it.disable() } // Disable CSRF (usually for stateless apps)
             .authorizeRequests { auth ->
                 auth
-                    .requestMatchers("/api/auth/**", "/api/auth/verify/email").permitAll() // Allow auth routes
+                    .requestMatchers("/api/auth/**").permitAll() // Allow auth routes
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN", "PRO", "TESTER")
+                    .requestMatchers("/api/pro/**").hasAnyRole("ADMIN", "PRO", "TESTER")
                     .anyRequest().authenticated() // Require authentication for other routes
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java) // Add JWT filter

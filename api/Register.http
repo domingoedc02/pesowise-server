@@ -8,14 +8,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZG9taW5nbzI1IiwiaWF0IjoxN
 ###
 
 ### Add a New User
-POST http://localhost:8080/api/auth/register
+POST http://127.0.0.1:8080/api/auth/register
 Content-Type: application/json
 
 {
   "firstName": "John",
   "lastName": "Domingo",
-  "userName": "jdomingo25",
-  "email": "domingoec@yahoo.com"
+  "userName": "jdomingo2511",
+  "email": "domingoec22@yahoo.com"
 }
 
 ###

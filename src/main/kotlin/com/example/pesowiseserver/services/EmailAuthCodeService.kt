@@ -1,51 +1,47 @@
 package com.example.pesowiseserver.services
 
-import com.example.pesowiseserver.data.repository.AccountsRepository
+import com.example.pesowiseserver.data.repository.UsersRepository
 import com.example.pesowiseserver.data.repository.EmailAuthCodeRepository
 import com.example.pesowiseserver.util.EncryptionUtil
-import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.Date
 
 @Service
 class EmailAuthCodeService(
-    private val accountsRepository: AccountsRepository,
-    private val emailAuthCodeRepository: EmailAuthCodeRepository
+    private val usersRepository: UsersRepository,
+    private val emailAuthCodeRepository: EmailAuthCodeRepository,
 ) {
 
-    fun verifyEmail(authId: String, code: String): EmailAuthResponse{
+    fun verifyEmail(authId: String, code: String): ResponseEntity<String>{
         val now = Date()
-        val auth = emailAuthCodeRepository.findById(authId).orElseThrow{
-            RuntimeException("Authentication Not Found")
-        }
+        val auth = emailAuthCodeRepository.findByAuthId(authId)
 
-        val account = accountsRepository.findById(auth.accountId).orElseThrow{
-            RuntimeException("Account Not Found")
-        }
+        if (auth.isEmpty) return ResponseEntity.status(404).body("Authentication code not registered")
 
-        if (auth.isUsed) throw RuntimeException("This code is already used")
+        val account = usersRepository.findById(auth.get().userId)
 
-        if (now > auth.dateExpiry) throw RuntimeException("This code is already expired")
+        if (account.isEmpty) return ResponseEntity.status(404).body("Your user account is not found")
 
-        if (account.isVerified) throw RuntimeException("Your account is already verified")
+        if (auth.get().isUsed) return ResponseEntity.status(400).body("This code is already used, Please try to request new code")
 
-        val authCode = EncryptionUtil.decryptPassword(auth.code)
+        if (now > auth.get().dateExpiry) ResponseEntity.status(400).body("This code is already expired, Add braces to 'if' statement")
+
+        if (account.get().isVerified) ResponseEntity.status(400).body("Your email is already used/verified")
+
+        val authCode = EncryptionUtil.decryptPassword(auth.get().code)
 
         if (authCode == code){
-            account.isVerified = true
-            accountsRepository.save(account)
+            account.get().isVerified = true
+            usersRepository.save(account.get())
 
-            auth.isUsed = true
-            emailAuthCodeRepository.save(auth)
+            auth.get().isUsed = true
+            emailAuthCodeRepository.save(auth.get())
 
-            return EmailAuthResponse(HttpStatus.OK, "You're account is successfully verified.")
+            return ResponseEntity.status(200).body("Email verification successfully")
         } else {
-            return EmailAuthResponse(HttpStatus.BAD_REQUEST, "Authentication Failed, Please retry again.")
+            return ResponseEntity.status(400).body("Email verification failed")
         }
     }
 }
-
-data class EmailAuthResponse(
-    val status: HttpStatus,
-    val message: String?
-)

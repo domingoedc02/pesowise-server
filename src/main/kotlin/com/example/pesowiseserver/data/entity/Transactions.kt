@@ -1,36 +1,46 @@
 package com.example.pesowiseserver.data.entity
 
-import com.example.pesowiseserver.util.enum.TransactionType
+import com.example.pesowiseserver.util.enum.TransactionTypeEnum
 import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
+import java.time.LocalDateTime
 import java.util.Date
 
 @Entity
 @Table(name = "transactions")
 data class Transactions(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-increment for primary key
-    val id: Long? = null,  // Use Long instead of String for PostgreSQL auto-increment primary key
+    @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    val transactionId: String? = "",
 
     @Enumerated(EnumType.STRING)  // Store the enum as a string value
     @Column(nullable = false)
-    val type: TransactionType,
+    val type: TransactionTypeEnum = TransactionTypeEnum.INCOME,
 
     @Column(nullable = false)
-    val category: String,
+    val category: String = "",
 
     @Column(nullable = true)
-    val subcategory: String?,
+    val subcategory: String? = "",
 
     @Column(nullable = false)
-    val payment: String,
+    val payment: String = "",
 
     @Column(nullable = false)
-    val receiptUrl: String,
+    val receiptUrl: String = "",
 
     @Temporal(TemporalType.TIMESTAMP)  // Store transactionDate as a TIMESTAMP
     @Column(nullable = false)
-    val transactionDate: Date,
+    val transactionDate: Date = Date(),
 
     @Column(nullable = false)
-    val amount: String
+    val amount: String = "",
+
+    @Column(nullable = true)
+    val notes: String? = "",
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    val createdAt: LocalDateTime? = null
 )

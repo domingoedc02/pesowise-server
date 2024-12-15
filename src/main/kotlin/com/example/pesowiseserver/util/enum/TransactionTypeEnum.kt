@@ -1,6 +1,6 @@
 package com.example.pesowiseserver.util.enum
 
-enum class TransactionType {
+enum class TransactionTypeEnum {
     INCOME,
     PAYMENT,
     TRANSFER,
