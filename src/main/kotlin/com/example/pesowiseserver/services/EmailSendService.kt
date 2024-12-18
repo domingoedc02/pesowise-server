@@ -28,6 +28,7 @@ class EmailSendService(
         val html = templateEngine.process("email-template", context)
 
         helper.setTo(to)
+        helper.setFrom("GoPESOWISE <verify@gopesowise.com>")
         helper.setSubject(subject)
         helper.setText(html, true) // Enable HTML
 

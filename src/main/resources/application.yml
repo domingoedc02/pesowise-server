@@ -3,13 +3,11 @@ spring:
     name: PesoWise-Server
 
   datasource:
+    type: org.springframework.jdbc.datasource.DriverManagerDataSource
     url: jdbc:postgresql://209.46.126.200:5432/pesowise_db
     username: dev_pesowise
-    password: 1yNh66^m9
+    password: 314u6Hi$i
     driver-class-name: org.postgresql.Driver
-    hikari:
-      pool-name: HikariCP
-
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -18,10 +16,11 @@ spring:
     show-sql: true
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.ionos.com
     port: 587
-    username: edson.john.cruz.domingo@gmail.com
-    password: oyotpkncfyhxyaku
+    username: sales@gopesowise.com
+    password: Darkhunter23#
+    protocol: smtp
     properties:
       mail:
         smtp:

@@ -56,7 +56,7 @@ class AuthenticationService(
         newAccount.email = dto.email
         val saveAcc = usersRepository.save(newAccount)
         val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
-        val subject = "Verification Code for PesoWise"
+        val subject = "Verification Code"
         emailSendService.sendEmail(dto.email, subject, code, dto.firstName)
 
         val accessToken = jwtUtil.generateAccessToken(saveAcc.userName, saveAcc.role)
