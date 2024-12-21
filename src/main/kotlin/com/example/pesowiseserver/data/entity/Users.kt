@@ -25,7 +25,7 @@ data class Users(
     @Column(nullable = false, unique = true)
     var email: String = "",
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     var password: String? = null,
 
     @Column(name = "is_verified", nullable = false)
