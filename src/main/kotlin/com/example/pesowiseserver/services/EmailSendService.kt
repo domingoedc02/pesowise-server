@@ -39,4 +39,24 @@ class EmailSendService(
         mailSender.send(message)
     }
 
+    @Throws(MessagingException::class)
+    fun verificationSuccessEmail(email: String) {
+        val message = mailSender.createMimeMessage()
+        val helper = MimeMessageHelper(message, true)
+
+        val context = Context().apply {
+            setVariable("email", email)
+        }
+
+        // Process the template
+        val html = templateEngine.process("email-template", context)
+
+        helper.setTo(email)
+        helper.setFrom("GoPESOWISE <verify@gopesowise.com>")
+        helper.setSubject("Verification Successful")
+        helper.setText(html, true) // Enable HTML
+
+        mailSender.send(message)
+    }
+
 }

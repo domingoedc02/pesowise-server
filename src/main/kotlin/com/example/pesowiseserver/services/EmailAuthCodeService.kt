@@ -13,6 +13,7 @@ import java.util.Date
 class EmailAuthCodeService(
     private val usersRepository: UsersRepository,
     private val emailAuthCodeRepository: EmailAuthCodeRepository,
+    private val emailSendService: EmailSendService
 ) {
 
     fun verifyEmail(authId: String, code: String): ResponseEntity<String>{
@@ -58,10 +59,12 @@ class EmailAuthCodeService(
         if (user.get().isVerified) return ResponseEntity.status(400).body(mapOf("statusText" to "Your account is already verified"))
 
         user.get().isVerified = true
-        usersRepository.save(user.get())
+        val newUser = usersRepository.save(user.get())
 
         auth.get().isUsed = true
         emailAuthCodeRepository.save(auth.get())
+
+        emailSendService.verificationSuccessEmail(newUser.email)
 
         return ResponseEntity.status(200).body(mapOf("statusText" to "Your account is now verified"))
     }
