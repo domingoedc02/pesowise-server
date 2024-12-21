@@ -49,7 +49,7 @@ class EmailAuthCodeService(
     fun verifyLink(id: String, token: String): ResponseEntity<Map<String, String>>{
         val auth = emailAuthCodeRepository.findByAuthId(id)
 
-        if (auth.isEmpty) return ResponseEntity.status(404).body(mapOf("statusText" to "Authentication Failed"))
+        if (auth.isEmpty || auth.get().isUsed) return ResponseEntity.status(404).body(mapOf("statusText" to "Authentication Failed"))
 
         val user = usersRepository.findByUserId(auth.get().userId)
 
