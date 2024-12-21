@@ -16,7 +16,7 @@ class JwtUtil(
 ) {
 
     private val SECRET_KEY = Keys.hmacShaKeyFor(secretKey.toByteArray())
-    private val ACCESS_TOKEN_EXPIRATION = 30L // in minutes
+    private val ACCESS_TOKEN_EXPIRATION = 120L // in minutes
     private val REFRESH_TOKEN_EXPIRATION = 7L // in days
 
     fun generateAccessToken(username: String, role: RoleEnum): String {
@@ -24,7 +24,7 @@ class JwtUtil(
         return Jwts.builder()
             .setClaims(claims)
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(ACCESS_TOKEN_EXPIRATION)))
+            .setExpiration(Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(ACCESS_TOKEN_EXPIRATION)))
             .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
             .compact()
     }

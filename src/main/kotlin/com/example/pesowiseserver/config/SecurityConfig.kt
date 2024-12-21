@@ -26,7 +26,7 @@ class SecurityConfig(
         http
             .cors { it.disable() } // Disable the default CORS policy
             .csrf { it.disable() } // Disable CSRF (usually for stateless apps)
-            .authorizeRequests { auth ->
+            .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/api/auth/**").permitAll() // Allow auth routes
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -41,14 +41,5 @@ class SecurityConfig(
     @Bean
     fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
         return config.authenticationManager
-    }
-
-    // CORS configuration
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-            .allowedOrigins("http://localhost:3000") // Allow frontend URL
-            .allowedMethods("GET", "POST", "PUT", "DELETE") // Allow specific methods
-            .allowedHeaders("*") // Allow all headers
-            .allowCredentials(true) // Allow credentials (cookies, HTTP authentication)
     }
 }

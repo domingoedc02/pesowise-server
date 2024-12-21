@@ -48,7 +48,8 @@ data class RegisterAccountDto(
     val firstName: String,
     val lastName: String,
     val userName: String,
-    val email: String
+    val email: String,
+    val password: String
 )
 
 data class LoginDto(

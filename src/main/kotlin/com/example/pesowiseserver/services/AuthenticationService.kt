@@ -24,6 +24,8 @@ class AuthenticationService(
 
         if (userAccount.isEmpty) return ResponseEntity.status(404).body(mapOf("not_found" to "Users not found"))
 
+        if (!userAccount.get().isVerified) return ResponseEntity.status(403).body(mapOf("message" to "Your account is not yet verified"))
+
         val objectMapper = jacksonObjectMapper()
         val jsonNode = objectMapper.readTree(userAccount.get().password?.let { EncryptionUtil.decryptPassword(it) })
 
@@ -54,6 +56,7 @@ class AuthenticationService(
         newAccount.lastName = dto.lastName
         newAccount.userName = dto.userName
         newAccount.email = dto.email
+        newAccount.password = dto.password
         val saveAcc = usersRepository.save(newAccount)
         val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
         val subject = "Verification Code"

@@ -1,5 +1,6 @@
 package com.example.pesowiseserver.services
 
+import com.example.pesowiseserver.data.entity.Users
 import com.example.pesowiseserver.data.repository.UsersRepository
 import com.example.pesowiseserver.data.repository.EmailAuthCodeRepository
 import com.example.pesowiseserver.util.EncryptionUtil
@@ -43,5 +44,25 @@ class EmailAuthCodeService(
         } else {
             return ResponseEntity.status(400).body("Email verification failed")
         }
+    }
+
+    fun verifyLink(id: String, token: String): ResponseEntity<Map<String, String>>{
+        val auth = emailAuthCodeRepository.findByAuthId(id)
+
+        if (auth.isEmpty) return ResponseEntity.status(404).body(mapOf("statusText" to "Authentication Failed"))
+
+        val user = usersRepository.findByUserId(auth.get().userId)
+
+        if (user.isEmpty) return ResponseEntity.status(404).body(mapOf("statusText" to "User Not Found"))
+
+        if (user.get().isVerified) return ResponseEntity.status(400).body(mapOf("statusText" to "Your account is already verified"))
+
+        user.get().isVerified = true
+        usersRepository.save(user.get())
+
+        auth.get().isUsed = true
+        emailAuthCodeRepository.save(auth.get())
+
+        return ResponseEntity.status(200).body(mapOf("statusText" to "Your account is now verified"))
     }
 }

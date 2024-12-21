@@ -34,6 +34,10 @@ secret:
   baseUrl: http://localhost:8080
   jwtKey: Cbf9iP65ogrWZhBI6Tevdc4XAySdNJaCSBxd2M8XDzk=
 
+logging:
+  level:
+    org.springframework.web.cors: DEBUG
+    org.springframework.web.filter.CorsFilter: DEBUG
 #server:
 #  address: 127.0.0.1
 
