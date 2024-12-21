@@ -2,31 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Email</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        /* Style the anchor to look like a button */
+        .button-like {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #316531;
+            color: azure;
+            font-weight: bolder;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .button-like:hover {
+            background-color: #275425; /* Slightly darker green on hover */
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <h1>Verification</h1>
 
 <h3>Dear <span th:text="${name}">[Recipient Name]</span></h3>
-<p style="max-width: 700px">Thank you for registering with GoPESOWISE, your personal finance tracking app! We're excited to have you on board as you take control of your financial journey.</p>
-<p style="max-width: 700px">To complete your registration and verify your email address, please click the button below:</p>
+<p style="max-width: 700px">
+    Thank you for registering with GoPESOWISE, your personal finance tracking app! We're excited to have you on board
+    as you take control of your financial journey.
+</p>
+<p style="max-width: 700px">
+    To complete your registration and verify your email address, please click the link below:
+</p>
 
-<!--    <h3 th:text="${authCode}" style="padding: 10px 20px; background-color: lightgrey; display: inline-block; font-size: 28px">129304</h3>-->
-<button
-        style="display: block; margin: 10px 0; padding: 10px 20px; background-color: #316531; color: azure; font-weight: bolder; border: none"
-        onclick="openInNewTab()">
+<a
+        class="button-like"
+        th:href="${verificationUrl}"
+        target="_blank">
     Verify My Email
-</button>
+</a>
 
-<script>
-    function openInNewTab() {
-        const url = [[${verificationUrl}]];
-        window.open(url, '_blank');
-    }
-</script>
+<p style="max-width: 700px">
+    If the button above doesn’t work, you can also verify your email by copying and pasting the following link into your browser:
+    <span th:text="${verificationUrl}">https://gopesowise.com/verify</span>
+</p>
 
-<p style="max-width: 700px">If the button above doesn’t work, you can also verify your email by copying and pasting the following link into your browser:</p>
-<p style="max-width: 700px">Once your email is verified, you'll gain full access to all the features GoPESOWISE has to offer, including:</p>
+<p style="max-width: 700px">
+    Once your email is verified, you'll gain full access to all the features GoPESOWISE has to offer, including:
+</p>
 
 <ul>
     <li>Tracking your expenses and income effortlessly.</li>
@@ -42,7 +67,8 @@
     If you did not register for a GoPESOWISE account, please disregard this email.
 </p>
 
-<p style="max-width: 700px">If you have any questions or encounter issues, feel free to reach out to our support team at
+<p style="max-width: 700px">
+    If you have any questions or encounter issues, feel free to reach out to our support team at
     <a href="mailto:support@gopesowise.com">support@gopesowise.com</a>
 </p>
 
