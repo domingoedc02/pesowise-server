@@ -12,7 +12,18 @@
 <p style="max-width: 700px">To complete your registration and verify your email address, please click the button below:</p>
 
 <!--    <h3 th:text="${authCode}" style="padding: 10px 20px; background-color: lightgrey; display: inline-block; font-size: 28px">129304</h3>-->
-<button style="display: block; margin: 10px 0; padding: 10px 20px; background-color: #316531; color: azure; font-weight: bolder; border: none">Verify My Email</button>
+<button
+        style="display: block; margin: 10px 0; padding: 10px 20px; background-color: #316531; color: azure; font-weight: bolder; border: none"
+        onclick="openInNewTab()">
+    Verify My Email
+</button>
+
+<script>
+    function openInNewTab() {
+        const url = [[${verificationUrl}]];
+        window.open(url, '_blank');
+    }
+</script>
 
 <p style="max-width: 700px">If the button above doesn’t work, you can also verify your email by copying and pasting the following link into your browser:</p>
 <p style="max-width: 700px">Once your email is verified, you'll gain full access to all the features GoPESOWISE has to offer, including:</p>

@@ -58,11 +58,14 @@ class AuthenticationService(
         newAccount.email = dto.email
         newAccount.password = dto.password
         val saveAcc = usersRepository.save(newAccount)
-        val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
+//        val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
+        val authId = generateAuthCodeUtil.saveAuthCode(saveAcc.userId)
         val subject = "Verification Code"
-        emailSendService.sendEmail(dto.email, subject, code, dto.firstName)
-
         val accessToken = jwtUtil.generateAccessToken(saveAcc.userName, saveAcc.role)
+        emailSendService.sendEmail(dto.email, subject, dto.firstName, authId, accessToken)
+
+
+
         return ResponseEntity.status(200).body(accessToken)
     }
 }

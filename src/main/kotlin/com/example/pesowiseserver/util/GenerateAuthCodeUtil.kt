@@ -25,6 +25,19 @@ class GenerateAuthCodeUtil(
         return EncryptionUtil.decryptPassword(save.code)
     }
 
+    fun saveAuthCode(userId: String): String{
+        val now = Date()
+        val save = EmailAuthCode()
+        save.userId = userId
+        save.referenceId = generateReferenceId()
+        save.code = generateCode()
+        save.isUsed = false
+        save.dateExpiry = Date(now.time + TimeUnit.MINUTES.toMillis(5))
+        save.dateIssued = now
+        val saved = emailAuthCodeRepository.save(save)
+        return saved.authId
+    }
+
     private fun generateCode(): String {
         return EncryptionUtil.encryptPassword(Random.nextInt(100000, 1000000).toString())
     }

@@ -33,6 +33,7 @@ secret:
   key: hQm4Khsf0pjIx8RNrg3LTbrbCsiiW6V78iyiaF1k4wg=
   baseUrl: http://localhost:8080
   jwtKey: Cbf9iP65ogrWZhBI6Tevdc4XAySdNJaCSBxd2M8XDzk=
+  verificationBaseUrl: https://auth.gopesowise.com
 
 logging:
   level:
