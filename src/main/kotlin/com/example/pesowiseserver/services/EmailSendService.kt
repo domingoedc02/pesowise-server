@@ -49,7 +49,7 @@ class EmailSendService(
         }
 
         // Process the template
-        val html = templateEngine.process("email-template", context)
+        val html = templateEngine.process("email-verification-success", context)
 
         helper.setTo(email)
         helper.setFrom("GoPESOWISE <verify@gopesowise.com>")
