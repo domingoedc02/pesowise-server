@@ -13,7 +13,7 @@ class WebConfig {
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**") // Allow all endpoints
-                    .allowedOrigins("http://localhost:3000") // Allow specific origin
+                    .allowedOrigins("http://localhost:3000", "https://auth.gopesowise.com") // Allow specific origin
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow specific HTTP methods
                     .allowedHeaders("*") // Allow all headers
                     .allowCredentials(true) // Allow cookies or authorization headers
