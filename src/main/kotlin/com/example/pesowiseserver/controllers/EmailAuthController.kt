@@ -21,14 +21,18 @@ class EmailAuthController(
         return emailAuthCodeService.verifyEmail(dto.authId, dto.code)
     }
 
-    @GetMapping("/link")
+    @PostMapping("/link")
     fun verifyEmailLink(
-        @RequestParam("id") id: String,
-        @RequestParam("token") token: String
+        @RequestBody dto: VerifyEmailLinkDto
     ): ResponseEntity<Map<String, String>>{
-        return emailAuthCodeService.verifyLink(id, token)
+        return emailAuthCodeService.verifyLink(dto.authId, dto.token)
     }
 }
+
+data class VerifyEmailLinkDto(
+    val authId: String,
+    val token: String
+)
 
 data class VerifyEmailDto(
     val authId: String,
