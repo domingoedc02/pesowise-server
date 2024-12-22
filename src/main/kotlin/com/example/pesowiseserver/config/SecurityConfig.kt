@@ -56,6 +56,7 @@ class SecurityConfig(
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
+        source.registerCorsConfiguration("/api/auth/verify/email/link", configuration)
         return source
 //        val corsConfiguration = CorsConfiguration()
 //        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")

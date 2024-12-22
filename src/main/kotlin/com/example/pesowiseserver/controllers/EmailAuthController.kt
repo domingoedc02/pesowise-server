@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/auth/verify/email")
-@CrossOrigin(origins = ["https://auth.gopesowise.com"])
 class EmailAuthController(
     private val emailAuthCodeService: EmailAuthCodeService
 ) {
