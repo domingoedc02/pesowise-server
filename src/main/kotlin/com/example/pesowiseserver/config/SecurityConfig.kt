@@ -28,7 +28,7 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors { corsConfigurationSource() } // Disable the default CORS policy
+            .cors { cors -> cors.configurationSource(corsConfigurationSource()) } // Disable the default CORS policy
             .csrf { it.disable() } // Disable CSRF (usually for stateless apps)
             .authorizeHttpRequests { auth ->
                 auth
