@@ -32,7 +32,7 @@ class SecurityConfig(
             .csrf { it.disable() } // Disable CSRF (usually for stateless apps)
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/api/auth/**").permitAll() // Allow auth routes
+                    .requestMatchers("/api/auth/**", "/api/auth/verify/email/link").permitAll() // Allow auth routes
                     .requestMatchers("/api/admin/**").hasRole("ADMIN")
                     .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN", "PRO", "TESTER")
                     .requestMatchers("/api/pro/**").hasAnyRole("ADMIN", "PRO", "TESTER")
@@ -49,22 +49,31 @@ class SecurityConfig(
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val corsConfiguration = CorsConfiguration()
-        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
-        corsConfiguration.allowedHeaders = listOf(
-            "content-type", "accessToken", "x-xsrf-token",
-            "Access-Control-Allow-Origin", "x-os-version", "x-app-version",
-            "x-os-type", "Authorization"
-        )
-        corsConfiguration.allowCredentials = true
-        corsConfiguration.setAllowedOriginPatterns(listOf("*"))
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("https://auth.gopesowise.com") // Allow specific origin
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
+        configuration.allowedHeaders = listOf("Authorization", "Content-Type")
+        configuration.allowCredentials = true
 
-        val corsSource: UrlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
-        corsSource.registerCorsConfiguration("/api/**", corsConfiguration)
-        corsSource.registerCorsConfiguration("/incoming/**", corsConfiguration)
-        corsSource.registerCorsConfiguration("/images/**", corsConfiguration)
-        corsSource.registerCorsConfiguration("/api/auth/verify/email/link", corsConfiguration)
-
-        return corsSource
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
+//        val corsConfiguration = CorsConfiguration()
+//        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
+//        corsConfiguration.allowedHeaders = listOf(
+//            "content-type", "accessToken", "x-xsrf-token",
+//            "Access-Control-Allow-Origin", "x-os-version", "x-app-version",
+//            "x-os-type", "Authorization"
+//        )
+//        corsConfiguration.allowCredentials = true
+//        corsConfiguration.setAllowedOriginPatterns(listOf("*"))
+//
+//        val corsSource: UrlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
+//        corsSource.registerCorsConfiguration("/api/**", corsConfiguration)
+//        corsSource.registerCorsConfiguration("/incoming/**", corsConfiguration)
+//        corsSource.registerCorsConfiguration("/images/**", corsConfiguration)
+//        corsSource.registerCorsConfiguration("/api/auth/verify/email/link", corsConfiguration)
+//
+//        return corsSource
     }
 }
