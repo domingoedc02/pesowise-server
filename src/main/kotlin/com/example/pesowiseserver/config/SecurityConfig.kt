@@ -14,7 +14,6 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import java.util.*
 
 
 @Configuration
@@ -50,9 +49,9 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("https://auth.gopesowise.com") // Allow specific origin
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
-        configuration.allowedHeaders = listOf("Authorization", "Content-Type")
+        configuration.addAllowedOrigin("https://auth.gopesowise.com")
+        configuration.addAllowedMethod("*")
+        configuration.addAllowedHeader("*")
         configuration.allowCredentials = true
 
         val source = UrlBasedCorsConfigurationSource()
