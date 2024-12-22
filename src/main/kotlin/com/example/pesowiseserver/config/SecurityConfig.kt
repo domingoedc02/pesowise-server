@@ -63,6 +63,7 @@ class SecurityConfig(
         corsSource.registerCorsConfiguration("/api/**", corsConfiguration)
         corsSource.registerCorsConfiguration("/incoming/**", corsConfiguration)
         corsSource.registerCorsConfiguration("/images/**", corsConfiguration)
+        corsSource.registerCorsConfiguration("/api/auth/verify/email/link", corsConfiguration)
 
         return corsSource
     }
