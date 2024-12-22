@@ -10,8 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import java.util.*
+
 
 @Configuration
 class SecurityConfig(
@@ -24,7 +28,7 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors { it.disable() } // Disable the default CORS policy
+            .cors { corsConfigurationSource() } // Disable the default CORS policy
             .csrf { it.disable() } // Disable CSRF (usually for stateless apps)
             .authorizeHttpRequests { auth ->
                 auth
@@ -41,5 +45,25 @@ class SecurityConfig(
     @Bean
     fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
         return config.authenticationManager
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val corsConfiguration = CorsConfiguration()
+        corsConfiguration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
+        corsConfiguration.allowedHeaders = listOf(
+            "content-type", "accessToken", "x-xsrf-token",
+            "Access-Control-Allow-Origin", "x-os-version", "x-app-version",
+            "x-os-type", "Authorization"
+        )
+        corsConfiguration.allowCredentials = true
+        corsConfiguration.setAllowedOriginPatterns(listOf("*"))
+
+        val corsSource: UrlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
+        corsSource.registerCorsConfiguration("/api/**", corsConfiguration)
+        corsSource.registerCorsConfiguration("/incoming/**", corsConfiguration)
+        corsSource.registerCorsConfiguration("/images/**", corsConfiguration)
+
+        return corsSource
     }
 }
