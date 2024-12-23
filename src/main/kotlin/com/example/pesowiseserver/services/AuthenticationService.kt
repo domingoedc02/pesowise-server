@@ -16,7 +16,7 @@ class AuthenticationService(
     private val usersRepository: UsersRepository,
     private val emailSendService: EmailSendService,
     private val generateAuthCodeUtil: GenerateAuthCodeUtil,
-    private val jwtUtil: JwtUtil
+    private val jwtUtil: JwtUtil,
 ) {
 
     fun login(dto: LoginDto): ResponseEntity<Map<String, String>>{
@@ -26,12 +26,9 @@ class AuthenticationService(
 
         if (!userAccount.get().isVerified) return ResponseEntity.status(403).body(mapOf("message" to "Your account is not yet verified"))
 
-        val objectMapper = jacksonObjectMapper()
-        val jsonNode = objectMapper.readTree(userAccount.get().password?.let { EncryptionUtil.decryptPassword(it) })
+        val password = EncryptionUtil.encryptPassword(dto.password)
 
-        val password = jsonNode["password"].asText()
-
-        if ((dto.username == userAccount.get().userName && dto.password == password || dto.username == userAccount.get().email && dto.password == password)) {  // Mock validation
+        if ((dto.username == userAccount.get().userName && password == userAccount.get().password || dto.username == userAccount.get().email && password == userAccount.get().password)) {  // Mock validation
             val accessToken = jwtUtil.generateAccessToken(userAccount.get().userName, userAccount.get().role)
             val refreshToken = jwtUtil.generateRefreshToken(userAccount.get().userName, userAccount.get().role)
             return ResponseEntity.ok(mapOf(
@@ -56,7 +53,7 @@ class AuthenticationService(
         newAccount.lastName = dto.lastName
         newAccount.userName = dto.userName
         newAccount.email = dto.email
-        newAccount.password = dto.password
+        newAccount.password = EncryptionUtil.encryptPassword(dto.password)
         val saveAcc = usersRepository.save(newAccount)
 //        val code = generateAuthCodeUtil.getAuthCode(saveAcc.userId)
         val authId = generateAuthCodeUtil.saveAuthCode(saveAcc.userId)

@@ -49,7 +49,7 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.addAllowedOrigin("https://auth.gopesowise.com")
+        configuration.addAllowedOrigin("*")
         configuration.addAllowedMethod("*")
         configuration.addAllowedHeader("*")
         configuration.allowCredentials = true
