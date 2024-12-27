@@ -7,7 +7,6 @@ import com.example.pesowiseserver.data.repository.UsersRepository
 import com.example.pesowiseserver.util.EncryptionUtil
 import com.example.pesowiseserver.util.GenerateAuthCodeUtil
 import com.example.pesowiseserver.util.JwtUtil
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
